@@ -89,3 +89,5 @@ docker compose exec web python manage.py createsuperuser
 - **App URL:** https://yourdomain.uz
 - **Admin:** https://yourdomain.uz/admin
 - **Test credentials:** username: `testuser` / password: `testpass123`
+
+<!-- Updated deployment configuration -->
