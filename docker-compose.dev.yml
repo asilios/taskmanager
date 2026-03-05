@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15-alpine
+    env_file: .env
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - app_network
+
+  web:
+    build: .
+    env_file: .env
+    environment:
+      - DEBUG=True
+    volumes:
+      - .:/app
+      - static_files:/app/staticfiles
+      - media_files:/app/media
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - app_network
+    command: python manage.py runserver 0.0.0.0:8000
+
+volumes:
+  postgres_data_dev:
+  static_files:
+  media_files:
+
+networks:
+  app_network:
+    driver: bridge
