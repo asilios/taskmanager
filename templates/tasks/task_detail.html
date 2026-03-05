@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}{{ task.title }} - TaskManager{% endblock %}
+{% block content %}
+<div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <h2>{{ task.title }}</h2>
+        <div>
+            <a href="/tasks/{{ task.pk }}/edit/" class="btn btn-primary">Edit</a>
+            <a href="/tasks/{{ task.pk }}/delete/" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
+    <table style="width:auto;min-width:400px;">
+        <tr><th style="width:140px;">Status</th><td><span class="badge badge-{{ task.status }}">{{ task.get_status_display }}</span></td></tr>
+        <tr><th>Priority</th><td><span class="badge badge-{{ task.priority }}">{{ task.get_priority_display }}</span></td></tr>
+        <tr><th>Category</th><td>{{ task.category.name|default:"-" }}</td></tr>
+        <tr><th>Due Date</th><td>{{ task.due_date|default:"-" }}</td></tr>
+        <tr><th>Tags</th><td>{% for tag in task.tags.all %}<span class="badge" style="background:#eee;color:#333;margin-right:4px;">{{ tag.name }}</span>{% empty %}-{% endfor %}</td></tr>
+        <tr><th>Created</th><td>{{ task.created_at|date:"d M Y, H:i" }}</td></tr>
+        <tr><th>Updated</th><td>{{ task.updated_at|date:"d M Y, H:i" }}</td></tr>
+    </table>
+    {% if task.description %}
+    <div style="margin-top:20px;">
+        <strong>Description:</strong>
+        <p style="margin-top:8px;color:#555;line-height:1.6;">{{ task.description }}</p>
+    </div>
+    {% endif %}
+    <div style="margin-top:20px;"><a href="/tasks/" class="btn btn-secondary">← Back to Tasks</a></div>
+</div>
+{% endblock %}

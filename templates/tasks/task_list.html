@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Tasks - TaskManager{% endblock %}
+{% block content %}
+<div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h2>My Tasks</h2>
+        <a href="/tasks/create/" class="btn btn-primary">+ New Task</a>
+    </div>
+    <form method="get" style="margin-bottom:16px;">
+        <div class="filter-bar">
+            <input type="text" name="q" placeholder="Search tasks..." value="{{ query }}">
+            <select name="status">
+                <option value="">All Statuses</option>
+                <option value="pending" {% if status == 'pending' %}selected{% endif %}>Pending</option>
+                <option value="in_progress" {% if status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                <option value="completed" {% if status == 'completed' %}selected{% endif %}>Completed</option>
+            </select>
+            <select name="priority">
+                <option value="">All Priorities</option>
+                <option value="high" {% if priority == 'high' %}selected{% endif %}>High</option>
+                <option value="medium" {% if priority == 'medium' %}selected{% endif %}>Medium</option>
+                <option value="low" {% if priority == 'low' %}selected{% endif %}>Low</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a href="/tasks/" class="btn btn-secondary">Clear</a>
+        </div>
+    </form>
+    {% if tasks %}
+    <table>
+        <thead><tr><th>Title</th><th>Category</th><th>Priority</th><th>Status</th><th>Due Date</th><th>Actions</th></tr></thead>
+        <tbody>
+        {% for task in tasks %}
+        <tr>
+            <td><a href="/tasks/{{ task.pk }}/">{{ task.title }}</a></td>
+            <td>{{ task.category.name|default:"-" }}</td>
+            <td><span class="badge badge-{{ task.priority }}">{{ task.get_priority_display }}</span></td>
+            <td><span class="badge badge-{{ task.status }}">{{ task.get_status_display }}</span></td>
+            <td>{{ task.due_date|default:"-" }}</td>
+            <td>
+                <a href="/tasks/{{ task.pk }}/edit/" class="btn btn-secondary" style="padding:4px 10px;font-size:12px;">Edit</a>
+                <a href="/tasks/{{ task.pk }}/delete/" class="btn btn-danger" style="padding:4px 10px;font-size:12px;">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color:#999;text-align:center;padding:30px 0;">No tasks found.</p>
+    {% endif %}
+</div>
+{% endblock %}

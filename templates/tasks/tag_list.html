@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Tags - TaskManager{% endblock %}
+{% block content %}
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+    <div class="card">
+        <h2 style="margin-bottom:16px;">Tags</h2>
+        {% if tags %}
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            {% for tag in tags %}
+            <span class="badge" style="background:#eee;color:#333;font-size:14px;padding:6px 12px;">{{ tag.name }}</span>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p style="color:#999;">No tags yet.</p>
+        {% endif %}
+    </div>
+    <div class="card">
+        <h2 style="margin-bottom:16px;">New Tag</h2>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label>{{ field.label }}</label>{{ field }}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Add Tag</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

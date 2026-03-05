@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - TaskManager{% endblock %}
+{% block content %}
+<h2 style="margin-bottom:20px;">Welcome back, {{ user.username }}! 👋</h2>
+<div class="stat-grid">
+    <div class="stat-card"><div class="number">{{ total }}</div><div class="label">Total Tasks</div></div>
+    <div class="stat-card"><div class="number" style="color:#2471a3">{{ pending }}</div><div class="label">Pending</div></div>
+    <div class="stat-card"><div class="number" style="color:#856404">{{ in_progress }}</div><div class="label">In Progress</div></div>
+    <div class="stat-card"><div class="number" style="color:#155724">{{ completed }}</div><div class="label">Completed</div></div>
+</div>
+<div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h3>Recent Tasks</h3>
+        <a href="/tasks/create/" class="btn btn-primary">+ New Task</a>
+    </div>
+    {% if recent_tasks %}
+    <table>
+        <thead><tr><th>Title</th><th>Priority</th><th>Status</th><th>Due Date</th><th>Actions</th></tr></thead>
+        <tbody>
+        {% for task in recent_tasks %}
+        <tr>
+            <td><a href="/tasks/{{ task.pk }}/">{{ task.title }}</a></td>
+            <td><span class="badge badge-{{ task.priority }}">{{ task.get_priority_display }}</span></td>
+            <td><span class="badge badge-{{ task.status }}">{{ task.get_status_display }}</span></td>
+            <td>{{ task.due_date|default:"-" }}</td>
+            <td>
+                <a href="/tasks/{{ task.pk }}/edit/" class="btn btn-secondary" style="padding:4px 10px;font-size:12px;">Edit</a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color:#999;text-align:center;padding:30px 0;">No tasks yet. <a href="/tasks/create/">Create your first task!</a></p>
+    {% endif %}
+    <div style="margin-top:14px;"><a href="/tasks/" class="btn btn-secondary">View All Tasks →</a></div>
+</div>
+{% endblock %}
